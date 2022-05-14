@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Model\SalonWorkingHours;
+class SalonService extends Model
+{
+    use HasFactory;
+    protected $table = 'salon_service' ;
+    protected $guarded = [];
+    public $hour, $minute;
+
+    public function __construct(array $attributes = array()) {
+		// Run parent Eloquent model construct method before setup
+		
+	
+	  public function salon(){
+        return $this->belongsTo('App\Models\Salon');
+    }
+
+    public function service(){
+        return $this->belongsTo('App\Models\Service');
+    }
+
+    /**
+	 * Get bookings from activity
+	 *
+	 * @return \App\Booking
+	 */
+	public function bookings()
+	{
+		return $this->hasMany(SalonBooking::class);
+	}
+}

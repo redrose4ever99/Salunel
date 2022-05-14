@@ -1,0 +1,23 @@
+ foreach ($bookings as $booking) {
+            if ($avaTimes[$i]['end_time'] != $avaTimes[$i]['start_time'])
+            {
+                // Switch times
+                $avaTimes[$i]['end_time'] = $booking->start;
+
+                // If avail and booking start time are the same, go back
+                if ($avaTimes[$i]['start_time'] == $booking->start) {
+                    array_pop($avaTimes);
+                }
+              
+                // IF booking and working end time is the same, go back
+                if ($booking->end != $finish_time) {
+                    $i++;
+                    // Switch times
+                    $avaTimes[$i]['start_time'] = $booking->end;
+
+                    // Default set end time as working time end time
+                    $avaTimes[$i]['end_time'] = $finish_time;
+                   
+                            }
+                    }
+              }
