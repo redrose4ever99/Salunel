@@ -183,8 +183,8 @@ return $minits;
                 $avaTimes[$i]['end_time'] = $booking->start;
                 // If avail and booking start time are the same, go back
                 if (strtotime($avaTimes[$i]['start_time']) == strtotime($booking->start)) {
-                    unset($avaTimes[$i]);
-                    //array_pop($avaTimes);
+                   // unset($avaTimes[$i]);
+                    array_pop($avaTimes);
                 }
                /* if (strtotime($avaTimes[$i]['start_time']) > strtotime($avaTimes[$i]['end_time'])) {
                     unset($avaTimes[$i]);

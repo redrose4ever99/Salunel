@@ -12,9 +12,7 @@ use App\Http\Controllers\CalendarController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [mainController::class, 'index']);
 //for midhatter
 
 
@@ -57,6 +55,9 @@ Route::resource('admin/times', 'App\Http\Controllers\SalonDaysController', [
     ]
 ]);
 
+Route::get('/manage', function () {
+    return view('manage');
+})->name('manage'); 
 //getStaffTimeSlote
 
 Route::post('admin/getStaffbyservice', [CalendarController::class, 'getStaffbyservice'])->name('getStaffbyservice');
