@@ -36,15 +36,14 @@
 			$this->col[] = ["label"=>"Duration","name"=>"duration"];
 			$this->col[] = ["label"=>"Active","name"=>"active"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
-
+			$id=$lang->value;
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
 			$lang=DB::table('salon_options')->where('salon_id',$salon_id)->where('name','abbr')->first();
-            $id=$lang->value;
+            
 			
 			$this->form[] = ['label'=>'service','name'=>'service_id','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataquery'=>'SELECT name as label, service_id as value FROM service_trans WHERE service_trans.abbr ="'.$abbr.'" '];
-			
 			$this->form[] = ['label'=>'Description','name'=>'description','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Main Price','name'=>'main_price','type'=>'money','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Duration','name'=>'duration','type'=>'time','validation'=>'required|date_format:H:i:s','width'=>'col-sm-10'];

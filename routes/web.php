@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\mainController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

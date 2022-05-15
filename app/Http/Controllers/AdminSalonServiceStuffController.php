@@ -4,22 +4,19 @@
 	use Request;
 	use DB;
 	use App;
-	use cb;
 	use CRUDBooster;
 
-	class AdminStaffs64Controller extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminSalonServiceStuffController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
-		$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
-		$options=DB::table('salon_options')->where('salon_id','=', $salon->id)->where('name','=','abbr')->first();  
-	    
+
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "name";
+			$this->title_field = "id";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = true;
-			$this->button_bulk_action = false;
+			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
 			$this->button_edit = true;
@@ -29,61 +26,34 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "staffs";
+			$this->table = "salon_service_stuff";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Name","name"=>"name"];
-			$this->col[] = ["label"=>"Title","name"=>"title"];
-			$this->col[] = ["label"=>"Email","name"=>"email"];
-			$this->col[] = ["label"=>"Image","name"=>"image","image"=>true];
-			$this->col[] = ["label"=>"Phone Num","name"=>"phone_num"];
+			$this->col[] = ["label"=>"Staff ","name"=>"staff_id","join"=>"staffs,title"];
+			$abbr=App::getLocale();
 			# END COLUMNS DO NOT REMOVE THIS LINE
-
+			$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
+			
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-		
-			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','datatable'=>'salons,name'];
-			$this->form[] = ['label'=>'Title','name'=>'title','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'gendar','name'=>'gendar','type'=>'select','datatable'=>'codes,decoded','datatable_where'=>'table_name = "gendar" and languagies_id='.$options->value];
+			$this->form[] = ['label'=>'Staff','name'=>'staff_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'staffs,title','datatable_where'=>'salon_id='.$salon->id];
+			$this->form[] = ['label'=>'Service','name'=>'service_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataquery'=>'select st.name as label ,st.service_id as value from service_trans st ,salon_service ss where ss.service_id=st.service_id and st.abbr = "'.$abbr.'" and   ss.salon_id ='.$salon->id];
 			
-			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
-			$this->form[] = ['label'=>'Phone Num','name'=>'phone_num','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'File types support : JPG, JPEG, PNG, GIF, BMP'];
-			$this->form[] = ['label'=>'Image','name'=>'image','type'=>'upload','validation'=>'required|image|max:3000','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Active','name'=>'active','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'1;2'];
+			//$this->form[]=  ['label'=>'Service','name'=>'service_id','type'=>'datamodal','datamodal_table'=>'services','width'=>'col-sm-3','datamodal_columns'=>'service_id,description','datamodal_select_to'=>'service_id:service_id','datamodal_size'=>'small','datamodal_where'=>'salon_id='.$salon->id];
 			
-			$abbr=__('msg.language');
-			$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
-			$columns=[];
-			$columns[] = ['label'=>'Service','name'=>'service_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataquery'=>'select st.name as label ,st.service_id as value from service_trans st ,salon_service ss where ss.service_id=st.service_id and st.abbr = "'.$abbr.'" and   ss.salon_id ='.$salon->id];
-			
-			$this->form[] = ['name'=>'salon_service','type'=>'child','columns'=>$columns,'table'=>'salon_service','foreign_key'=>'services_id'];
-			$this->form[]=['label'=>'support services','type'=>'button_name'];
-			
-			# START FORM DO NOT REMOVE THIS LINE
-			/*$columns=[];
-			$columns[] = ['label'=>'Date','name'=>'date','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
-			$columns[] = ['label'=>'Start Time','name'=>'start_time','type'=>'time','validation'=>'required|date_format:H:i:s','width'=>'col-sm-10'];
-			$columns[]= ['label'=>'Finish Time','name'=>'finish_time','type'=>'time','validation'=>'required|date_format:H:i:s','width'=>'col-sm-10'];
-			$this->form[] = ['name'=>'salon_working_hours','type'=>'child','columns'=>$columns,'table'=>'salon_working_hours','foreign_key'=>'staff_id'];
-			$this->form[]=['label'=>'staff schedul','type'=>'button_name'];
-		
-		*/	
-			
-			
-			
+			//$this->form[] = ['label'=>'Service','name'=>'service_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'salon_service,description','datatable_where'=>'salon_id='.$salon->id];
+			$a=__('salon.active.1');
+			$n=__('salon.active.0');
+			$this->form[] = ['label'=>'Active','name'=>'active','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-5','dataenum'=>$a.';'.$n];//"'".$a."';'".$n."'"];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ["label"=>"Name","name"=>"name","type"=>"text","required"=>TRUE,"validation"=>"required|string|min:3|max:70","placeholder"=>"You can only enter the letter only"];
 			//$this->form[] = ["label"=>"Salon Id","name"=>"salon_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"salon,id"];
-			//$this->form[] = ["label"=>"Title","name"=>"title","type"=>"text","required"=>TRUE,"validation"=>"required|string|min:3|max:70","placeholder"=>"You can only enter the letter only"];
-			//$this->form[] = ["label"=>"Email","name"=>"email","type"=>"email","required"=>TRUE,"validation"=>"required|min:1|max:255|email|unique:staffs","placeholder"=>"Please enter a valid email address"];
-			//$this->form[] = ["label"=>"Image","name"=>"image","type"=>"upload","required"=>TRUE,"validation"=>"required|image|max:3000","help"=>"File types support : JPG, JPEG, PNG, GIF, BMP"];
-			//$this->form[] = ["label"=>"Phone Num","name"=>"phone_num","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Rating","name"=>"rating","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Staff Id","name"=>"staff_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"staff,id"];
+			//$this->form[] = ["label"=>"Service Id","name"=>"service_id","type"=>"select2","required"=>TRUE,"validation"=>"required|min:1|max:255","datatable"=>"service,id"];
 			//$this->form[] = ["label"=>"Active","name"=>"active","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
 			# OLD END FORM
 
@@ -271,9 +241,10 @@
 	    |
 	    */
 	    public function hook_query_index(&$query) {
-			$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
-			$query->where('salon_id',$salon->id);
-	            
+		$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
+		$query->where('salon_id',$salon->id);
+		 
+		
 	    }
 
 	    /*
@@ -293,24 +264,14 @@
 	    | @arr
 	    |
 	    */
-	    public function hook_before_add(&$postdata) {    
-		
-			$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
+	    public function hook_before_add(&$postdata) {        
+		$a=__('salon.active.1');
+		$n=__('salon.active.0');     
+		if($postdata['active']==$a) $postdata['active']=1;
+		if($postdata['active']==$n) $postdata['active']=0;
+		$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
 			$postdata['salon_id'] = $salon->id;
 
-			$title=$postdata['title'];
-			$titles=DB::table('staffs')->where('title',$title)->where('salon_id',$salon->id)->first();
-			if( $titles!=null) {    
-				//return cb()->redirect(action("AdminStaffs64Controller@getIndex"), "this staff title already insert just update", "error");
-				
-				CRUDBooster::redirect(CRUDBooster::adminPath(),("this staff title already insert just update"));
-			}
-			$email=$postdata['email'];
-			$emails=DB::table('staffs')->where('email',$email)->where('salon_id',$salon->id)->first();
-			if( $emails!=null) {    
-				CRUDBooster::redirect(CRUDBooster::adminPath(),("this staff email already insert just update"));
-			}
-			
 	    }
 
 	    /* 
@@ -324,15 +285,6 @@
 	        //Your code here
 
 	    }
-		public function postSaveData($n) {
-			// ...
-		if ($n==1)
-			// First parameter is for URL, second parameter for message, third parameter for alert type (success, warning, info, primary, danger)
-			return cb()->redirect(action("AdminStaffs64Controller@getIndex"), "The data has been updated!", "success");
-		else 
-		return cb()->redirect(action("AdminStaffs64Controller@getIndex"), "duplicated !", "warning");
-		
-		}
 
 	    /* 
 	    | ---------------------------------------------------------------------- 
@@ -343,15 +295,11 @@
 	    | 
 	    */
 	    public function hook_before_edit(&$postdata,$id) {        
-			$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
-			$postdata['salon_id'] = $salon->id;
-			/*$title=$postdata['title'];
-			$titles=DB::table('staffs')->where('title',$title)->where('salon_id',$salon->id)->where('id','=',$id)->first();
-			if( $titles!=null) {    
-				CRUDBooster::redirect(CRUDBooster::adminPath(),("this staff title already insert just update"));
-			
-		}*/
-			
+		$a=__('salon.active.1');
+		$n=__('salon.active.0');     
+		if($postdata['active']==$a) $postdata['active']=1;
+		if($postdata['active']==$n) $postdata['active']=0;
+
 	    }
 
 	    /* 

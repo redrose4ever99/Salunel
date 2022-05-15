@@ -63,8 +63,7 @@
 
 
                           <li class="scroll-to-section"><a href="{{ route('register') }}" class="active">home</a></li>
-                          <li class="scroll-to-section"><a href="#services">Services</a></li>
-
+                          
                           <li class="has-sub">
                             <a href="javascript:void(0)">Pages</a>
                             <ul class="sub-menu">

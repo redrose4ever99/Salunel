@@ -3,6 +3,7 @@
 	use Session;
 	use Request;
 	use DB;
+	use App;
 	use CRUDBooster;
 	use Config;
 	class AdminSalonServiceController extends \crocodicstudio\crudbooster\controllers\CBController {
@@ -26,31 +27,35 @@
 			$this->button_import = false;
 			$this->button_export = false;
 			$this->table = "salon_service";
-			
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Service","name"=>"service_id","join"=>"salon_service,service_id"];
+			
+			$this->col[] = ["label"=>"description","name"=>"description"];
 			$this->col[] = ["label"=>"Main Price","name"=>"main_price"];
-			$this->col[] = ["label"=>"Main Duration","name"=>"main_duration"];
+			$this->col[] = ["label"=>"Main Duration","name"=>"duration"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
+
+			$abbr=App::getLocale();
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Service','name'=>'service_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataquery'=>'select name as label ,service_id as value from service_trans where languagies_id = (select value from salon_options v where v.name ="abbr" and v.salon_id=salon_id)'];
-			$this->form[] = ['label'=>'Main Price  in $','name'=>'main_price','type'=>'money','validation'=>'required|min:1|max:255','width'=>'col-sm-3' ];
-			$this->form[] = ['label'=>'Main Duration','name'=>'main_duration','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataenum'=>'15;30;45;60'];
-			$this->form[] = ['label'=>'Active','name'=>'active','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataenum'=>'Active;Un active'];
+			$this->form[] = ['label'=>'Service','name'=>'service_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataquery'=>'select ss.name as label ,ss.service_id as value from service_trans ss where ss.abbr ="'.$abbr.'"'];
+			$this->form[] = ['label'=>'description','name'=>'description','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$a=__('salon.active.1');
+			$n=__('salon.active.0');
+			$this->form[] = ['label'=>'Main Price  in $','name'=>'main_price','type'=>'money','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Main Duration','name'=>'duration','type'=>'time','validation'=>'required','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Active','name'=>'active','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataenum'=>$a.';'.$n];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Service Id','name'=>'service_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			//$this->form[] = ['label'=>'Main Price  in $','name'=>'main_price','type'=>'money','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			//
-			//$this->form[] = ['label'=>'Main Duration','name'=>'main_duration','type'=>'time','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			//$this->form[] = ['label'=>'Active','name'=>'active','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-5','dataenum'=>'Active;Un active'];
+			//$this->form[] = ['label'=>'Service','name'=>'service_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataquery'=>'select name as label ,service_id as value from service_trans where abbr ='.$abbr];
+			//$this->form[] = ['label'=>'Main Price  in $','name'=>'main_price','type'=>'money','validation'=>'required|min:1|max:255','width'=>'col-sm-3' ];
+			//$this->form[] = ['label'=>'Main Duration','name'=>'main_duration','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataenum'=>'15;30;45;60'];
+			//$this->form[] = ['label'=>'Active','name'=>'active','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-3','dataenum'=>'Active;Un active'];
 			# OLD END FORM
 
 			/* 
@@ -258,9 +263,9 @@
 	    |
 	    */
 	    public function hook_before_add(&$postdata) {      
-			$user_id=CRUDBooster::myId();
-			$salon=DB::table('salons')->where('user_id', $user_id);
-			$postdata['salon_id'] = $salon->id;
+		$salon=DB::table('salons')->where('user_id',CRUDBooster::myId())->first();
+		$postdata['salon_id'] = $salon->id;
+		
 			$a=__('salon.active.1');
 			$n=__('salon.active.0');  
 			if($postdata['active']==$a) $postdata['active']=1;

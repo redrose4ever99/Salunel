@@ -4,6 +4,11 @@ return [
 
 
 
+    'lang'=>[
+        'lang_code'=>'Language Code',
+        'lang_code'=>'Language Name',
+        'lang_arabic_name'=>'Language Arabic Name',
+    ],
 
 'joud'=>'joud',
 'contact' => 'Contact',

@@ -30,17 +30,17 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>cbLang('lang_code'),"name"=>"abbr"];
-			$this->col[] = ["label"=>cbLang('lang_name'),"name"=>"locale_name"];
-			$this->col[] = ["label"=>cbLang('arabic_name'),"name"=>"ar_name"];
+			$this->col[] = ["label"=>__('panel.lang_code'),"name"=>"abbr"];
+			$this->col[] = ["label"=>__('panel.lang_name'),"name"=>"locale_name"];
+			$this->col[] = ["label"=>__('panel.lang_arabic_name'),"name"=>"ar_name"];
 		
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>cbLang('lang_code'),'name'=>'abbr','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>cbLang('lang_name'),'name'=>'locale_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>cbLang('arabic_name'),'name'=>'ar_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>__('panel.lang_code'),'name'=>'abbr','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>__('panel.lang_name'),'name'=>'locale_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>__('panel.lang_arabic_name'),'name'=>'ar_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Direction','name'=>'direction','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'rtl;ltr'];
 			$a=__('salon.active.1');
 			$n=__('salon.active.0');
